@@ -44,8 +44,7 @@ public class UserService {
 			throw new UserNotFoundException("user not found with id : "+id);
 		 User user =new User(id, userRequest.getName(), userRequest.getEmail(),
                  userRequest.getMobile(), userRequest.getGender(), userRequest.getAge(), userRequest.getNationality());
-//		 user.setUserId(id);
-		 //user.setName(userRequest.getName());
+
 		 return repository.save(user);
 	}
 }

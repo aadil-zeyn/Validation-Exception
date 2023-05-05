@@ -3,6 +3,7 @@ package com.javatechie.api.controller;
 import com.javatechie.api.dto.UserRequest;
 import com.javatechie.api.entity.User;
 import com.javatechie.api.exception.UserNotFoundException;
+import com.javatechie.api.repository.UserRepository;
 import com.javatechie.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,26 +17,42 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService service;
+	@Autowired
+    private UserRepository repository;
 
     @PostMapping("/signup")
     public ResponseEntity<User> saveUser(@RequestBody @Valid UserRequest userRequest){
-        return new ResponseEntity<>(service.saveUser(userRequest), HttpStatus.CREATED);
+    	User user =new User(0, userRequest.getName(), userRequest.getEmail(),
+                userRequest.getMobile(), userRequest.getGender(), userRequest.getAge(), userRequest.getNationality());
+    	repository.save(user);
+    	return ResponseEntity.ok().body(user);
     }
 
     @GetMapping("/fetchAll")
     public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok(service.getALlUsers());
+        return ResponseEntity.ok(repository.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) throws UserNotFoundException {
-        return ResponseEntity.ok(service.getUser(id));
+    	User user= repository.findByUserId(id);
+        if(user!=null){
+        	return ResponseEntity.ok(user);
+        }else{
+            throw new UserNotFoundException("user not found with id : "+id);
+        }
+        
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@RequestBody UserRequest userRequest,@PathVariable int id) throws UserNotFoundException{
-        return ResponseEntity.ok(service.uptadeUser(userRequest,id));
+        
+    	User u=repository.findByUserId(id);
+		if(u==null)
+			throw new UserNotFoundException("user not found with id : "+id);
+		 User user =new User(id, userRequest.getName(), userRequest.getEmail(),
+                 userRequest.getMobile(), userRequest.getGender(), userRequest.getAge(), userRequest.getNationality());
+
+    	return ResponseEntity.ok().body(user);
     }
     
 }
