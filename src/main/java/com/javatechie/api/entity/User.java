@@ -1,6 +1,5 @@
 package com.javatechie.api.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,8 +11,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "USERS_TBL")
 @Data
-@AllArgsConstructor(staticName = "build")
-@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue
@@ -66,10 +63,18 @@ public class User {
 	public void setNationality(String nationality) {
 		this.nationality = nationality;
 	}
-	public static User build(int i, String name2, String email2, String mobile2, String gender2, int age2,
-			String nationality2) {
-		// TODO Auto-generated method stub
-		return null;
+	public User(int userId, String name, String email, String mobile, String gender, int age, String nationality) {
+		
+		this.userId = userId;
+		this.name = name;
+		this.email = email;
+		this.mobile = mobile;
+		this.gender = gender;
+		this.age = age;
+		this.nationality = nationality;
 	}
+	public User() {
+	}
+	
     
 }

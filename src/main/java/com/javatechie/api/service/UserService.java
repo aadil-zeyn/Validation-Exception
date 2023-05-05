@@ -17,8 +17,7 @@ public class UserService {
 
 
     public User saveUser(UserRequest userRequest) {
-        User user = User.
-                build(0, userRequest.getName(), userRequest.getEmail(),
+        User user =new User(0, userRequest.getName(), userRequest.getEmail(),
                         userRequest.getMobile(), userRequest.getGender(), userRequest.getAge(), userRequest.getNationality());
         return repository.save(user);
     }
@@ -37,4 +36,16 @@ public class UserService {
             throw new UserNotFoundException("user not found with id : "+id);
         }
     }
+
+
+	public User uptadeUser(UserRequest userRequest, int id) throws UserNotFoundException {
+		User u=repository.findByUserId(id);
+		if(u==null)
+			throw new UserNotFoundException("user not found with id : "+id);
+		 User user =new User(id, userRequest.getName(), userRequest.getEmail(),
+                 userRequest.getMobile(), userRequest.getGender(), userRequest.getAge(), userRequest.getNationality());
+//		 user.setUserId(id);
+		 //user.setName(userRequest.getName());
+		 return repository.save(user);
+	}
 }
